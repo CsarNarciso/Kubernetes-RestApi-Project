@@ -1,0 +1,26 @@
+version: "3"
+services:
+  app:
+    build: .
+    container_name: app
+    environment:
+      - DATABASE_URL=jdbc:postgresql://postgres-c:5432/test
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=123
+    ports:
+      - 9001:9001
+    depends_on:
+      - postgres-c
+  postgres-c:
+    image: postgres:latest
+    container_name: postgres-c
+    hostname: postgres-c
+    environment:
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: test
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:
