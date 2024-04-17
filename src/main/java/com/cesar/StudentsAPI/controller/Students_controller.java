@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +32,17 @@ public class Students_controller {
 		
 		return ResponseEntity.noContent().build();
 	}
+	
+	
+	
+	@PostMapping("/create")
+	public ResponseEntity<?> create(@RequestBody Student student){
+			
+		student = repo.save(student);		
+		
+		return ResponseEntity.ok( student );
+	}
+	
 	
 	
 	@Autowired
