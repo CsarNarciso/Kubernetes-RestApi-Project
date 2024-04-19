@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-configmap
+data:
+  DATABASE_URL: jdbc:postgresql://db-service:5432/test
+  POSTGRES_DB: test
