@@ -1,8 +1,8 @@
 version: "3"
 services:
-  app:
+  api-c:
     build: .
-    container_name: app
+    container_name: api
     environment:
       - DATABASE_URL=jdbc:postgresql://postgres-c:5432/test
       - DATABASE_USER=postgres

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.cesar.StudentsAPI.Entity.Student;
 
-public interface Students_repository extends JpaRepository<Student, Integer>{
+public interface Student_repository extends JpaRepository<Student, Long>{
 
 	List<Student> findAll();
 }
