@@ -3,21 +3,23 @@ kind: PersistentVolume
 metadata:
   name: db-volume
 spec:
-  hostPath: 
-  path: "/postgres/data"
+  storageClassName: hostpath
   capacity:
     storage: 1Gi
   accessModes:
-  - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+    - ReadWriteOnce
+  hostPath:
+    path: "/postgres/data"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: db-volume-claim
 spec:
-  accessModes:
-  - ReadWriteOnce
+  storageClassName: hostpath
   resources:
-    request:
-      storage: 1Gi
+    requests:
+      storage: 50Mi
+  accessModes:
+    - ReadWriteOnce
+

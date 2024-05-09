@@ -35,13 +35,13 @@ spec:
                 secretKeyRef:
                   name: db-secret
                   key: POSTGRES_PASSWORD
-          volumeMounts: 
-            - mounthPath: /var/lib/postgresql/data
-              name: db-data 
+          volumeMounts:
+          - name: db-data
+            mountPath: /var/lib/postgresql/data
       volumes:
-        - name: db-data  
-          persistentVolumeClaim:
-            claimName: db-volume-claim
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: db-volume-claim
 ---
 apiVersion: v1
 kind: Service
