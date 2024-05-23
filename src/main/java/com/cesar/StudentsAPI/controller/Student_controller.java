@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cesar.StudentsAPI.Entity.Student;
-import com.cesar.StudentsAPI.persistence.Student_repository;
+import com.cesar.StudentsAPI.service.Student_service;
 
 
 
@@ -30,8 +30,8 @@ public class Student_controller {
 	@GetMapping()
 	public ResponseEntity<?> getAll(){
 		
-		// Get students from DB
-		List<Student> students = repo.findAll();
+		// Get students from Service
+		List<Student> students = service.getAll();
 		
 		
 		// If there are students...
@@ -51,8 +51,8 @@ public class Student_controller {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id){
 		
-		// Get student from DB
-		Optional<Student> student = repo.findById(id);
+		// Get student from Service
+		Optional<Student> student = service.getById(id);
 		
 		
 		// If the student exists...
@@ -73,14 +73,8 @@ public class Student_controller {
 	@PostMapping()
 	public ResponseEntity<?> create(@RequestBody Student student){
 			
-		// Make sure id is null to prevent resources updates 
-		if ( student.getId() != null ) {
-			
-			student.setId(null);
-		}
-		
 		// Update student by providing id from DB
-		student = repo.save(student);		
+		student = service.create(student);		
 		
 		return ResponseEntity.status( HttpStatus.CREATED ).body( student );
 	}
@@ -91,19 +85,10 @@ public class Student_controller {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Student updatedStudent){
 		
-		// If resource exists
-		if ( repo.findById( id ).isPresent() ) {
+		if ( service.update(id, updatedStudent) != null ) {
 			
 			
-			// Make sure resource id equals to path id to prevent its updated
-			if ( updatedStudent.getId() != id ) {
-				
-				updatedStudent.setId( id );
-			}
-			
-			
-			// and update it
-			return ResponseEntity.ok( repo.save( updatedStudent ));	
+			return ResponseEntity.ok( updatedStudent );	
 		}
 		
 		// If not,
@@ -117,14 +102,12 @@ public class Student_controller {
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody Student updatedFields){
 		
-		// Get student from DB
-		Student student = repo.findById( id ).get();
+		Student patchedStudent = service.patch(id, updatedFields);
 		
-		// If the resource exists...
-		if ( student != null ) {
+		//If the resource exists...
+		if ( patchedStudent != null ) {
 			
-			// patch its fields
-			student.setName( updatedFields.getName() );
+			return ResponseEntity.ok( service.update(id, updatedFields) );
 		}
 		
 		// If not,
@@ -138,16 +121,7 @@ public class Student_controller {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id){
 		
-		// Get student from DB
-		Student student = repo.findById(id).get();
-		
-		// If resource exists...
-		if ( repo.findById( id ) != null ) {
-			
-			repo.deleteById( id );
-			
-			return ResponseEntity.ok( student );
-		}
+		service.delete(id);
 		
 		return ResponseEntity.noContent().build();
 	}
@@ -157,5 +131,5 @@ public class Student_controller {
 	
 	
 	@Autowired
-	private Student_repository repo;
+	private Student_service service;
 }
